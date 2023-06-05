@@ -1,0 +1,206 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="theme-color" content="#ffffff">
+    <title>保存 - Powered by OIso</title>
+    <link rel="preconnect" href="//cdn.w3cbus.com">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="https://cdn.w3cbus.com/mdui.org/static/theme/material/index.e8409b3c.css">
+</head>
+
+<body class="mdui-drawer-body-left mdui-loaded">
+    <div class="mdui-appbar-with-toolbar mg-app">
+        <div class="mc-appbar mdui-appbar mdui-appbar-fixed">
+            <div class="toolbar mdui-toolbar"><button class="drawer mdui-btn mdui-btn-icon mdui-ripple"
+                    mdui-drawer="{target: '#main-drawer', swipe: true}"><i
+                        class="mdui-icon material-icons">menu</i></button><a class="headline" href="/">帖子小站</a>
+                <div class="title">保存</div>
+            </div>
+        </div>
+        <div class="mc-drawer mdui-drawer" id="main-drawer">
+            <div class="mdui-list"><a class="mdui-list-item mdui-ripple" href="/"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">home</i>
+                    <div class="mdui-list-item-content">首页</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple" href="/list"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">list</i>
+                    <div class="mdui-list-item-content">帖子列表</div>
+                </a><a class="mdui-list-item mdui-ripple" href="/rank"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">details</i>
+                    <div class="mdui-list-item-content">神帖排行</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple mdui-list-item-active"
+                    href="/save"><i class="mdui-list-item-icon mdui-icon material-icons">save</i>
+                    <div class="mdui-list-item-content">保存</div>
+                </a><a class="mdui-list-item mdui-ripple" href="/search"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">search</i>
+                    <div class="mdui-list-item-content">搜索</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple" href="/about"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">info</i>
+                    <div class="mdui-list-item-content">关于</div>
+                </a>
+            </div>
+            <div class="copyright">
+                <p>© 2023 <a href="https://www.oiso.cf" target="_blank">OIso</a></p>
+                <p>Powered by <a href="https://github.com/oiso-developer-team/" target="_blank">OIso Team</a> &amp; <a
+                        href="https://www.amzcd.top" target="_blank">diyanqi</a></p>
+            </div>
+        </div>
+        <div id="page-index" class="mdui-container">
+            <div class="banner">
+                <h1><strong>保</strong>存帖子
+                </h1>
+                <div class="meta">可输入单页帖子、或某个id的帖子来保存所有页码！</div>
+                <div class="mdui-textfield">
+                    <input class="mdui-textfield-input" type="text" placeholder="请输入帖子链接或编号" />
+                </div>
+                <div class="actions">
+                    <a id="sbt" onclick="gosave();" class="mdui-btn mdui-ripple">立即保存</a>
+                </div>
+                <div id="mylog"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function gosave() {
+            document.getElementById("sbt").setAttribute("disabled", "disabled");
+            var url = document.getElementsByClassName("mdui-textfield-input")[0].value;
+            if (url == "") {
+                mdui.snackbar({
+                    message: '请输入帖子链接或编号'
+                });
+                document.getElementById("sbt").removeAttribute("disabled");
+                return;
+            } else if (!isNaN(url)) {
+                url = `https://www.luogu.com.cn/discuss/${url}`;
+            }
+            if (url.indexOf("page=") != -1) {
+                document.getElementById("mylog").innerHTML = `<br/><div class="mdui-progress">
+                        <div class="mdui-progress-indeterminate"></div>
+                    </div>`;
+                const myurl = `https://lgbbs.oiso.cf/save.php?url=${url}`;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', myurl, true);
+                xhr.send();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        if (xhr.responseText == "success") {
+                            mdui.snackbar({
+                                message: '保存成功'
+                            });
+                        } else {
+                            mdui.snackbar({
+                                message: xhr.responseText
+                            });
+                        }
+                        document.getElementById("mylog").innerHTML = "";
+                    }
+                    document.getElementById("sbt").removeAttribute("disabled");
+                }
+            } else {
+                document.getElementById("mylog").innerHTML = `<br/><div class="mdui-progress">
+                        <div class="mdui-progress-indeterminate"></div>
+                    </div>`;
+                const myurl = `https://lgbbs.oiso.cf/save.php?url=${url}?page=1`;
+                var xhr3 = new XMLHttpRequest();
+                xhr3.open('GET', myurl, true);
+                xhr3.send();
+                xhr3.onreadystatechange = function () {
+                    if (xhr3.readyState == 4 && xhr3.status == 200) {
+                        if (xhr3.responseText == "success") {
+                            // 第二个请求：获取详细信息
+                            const apiurl2 = `https://lgbbs.oiso.cf/api/show_detail.php?url=${url}?page=1&r=${Math.random()}`;
+                            var xhr2 = new XMLHttpRequest();
+                            xhr2.open('GET', apiurl2, true);
+                            xhr2.send();
+                            xhr2.onreadystatechange = function () {
+                                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                                    var data = JSON.parse(xhr2.responseText);
+                                    console.log(data);
+                                    const total_page = data.total_page;
+                                    window['saved'] = 1;
+                                    document.getElementById("mylog").innerHTML = `<br/><div class="mdui-progress">
+                                        <div class="mdui-progress-determinate" style="width: ${window['saved'] / total_page * 100}%"></div>
+                                    </div>`;
+                                    for (var i = 2; i <= total_page; i++) {
+                                        setTimeout(function () {
+                                            const myurl = `https://lgbbs.oiso.cf/save.php?url=${url}?page=${i}`;
+                                            window["xhr" + String(i)] = new XMLHttpRequest();
+                                            window["xhr" + String(i)].open('GET', myurl, true);
+                                            window["xhr" + String(i)].send();
+                                            window["xhr" + String(i)].onreadystatechange = function () {
+                                                if (window["xhr" + String(i)].readyState == 4 && window["xhr" + String(i)].status == 200) {
+                                                    if (window["xhr" + String(i)].responseText == "success") {
+                                                        document.getElementById("mylog").innerHTML = `<br/><div class="mdui-progress">
+                                                        <div class="mdui-progress-determinate" style="width: ${window['saved'] / total_page * 100}%"></div>
+                                                    </div>
+                                                    <div class="meta">正在保存 ${window['saved']} / ${total_page} 页</div>`;
+                                                        window['saved']++;
+                                                        if (window['saved'] == total_page) {
+                                                            document.getElementById("sbt").removeAttribute("disabled");
+                                                            document.getElementById("mylog").innerHTML = "";
+                                                            mdui.snackbar({
+                                                                message: `共成功保存 ${total_page} 页`
+                                                            });
+                                                        }
+                                                    } else {
+                                                        mdui.snackbar({
+                                                            message: window["xhr" + String(i)].responseText
+                                                        });
+                                                        document.getElementById("sbt").removeAttribute("disabled");
+                                                    }
+                                                }
+                                            }
+                                        }, 1500*(i-1));
+                                    }
+                                }
+                            }
+                        } else {
+                            mdui.snackbar({
+                                message: xhr3.responseText
+                            });
+                            document.getElementById("sbt").removeAttribute("disabled");
+                        }
+                    } else {
+                        document.getElementById("sbt").removeAttribute("disabled");
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script>
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function handleDarkModeChange(e) {
+            if (e.matches) {
+                console.log('当前系统已开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded mdui-theme-layout-dark');
+            } else {
+                console.log('当前系统未开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded');
+            }
+        }
+
+        darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+        // 当DOM加载完毕：
+        document.addEventListener('DOMContentLoaded', () => {
+            // 如果当前系统开启了暗黑模式：
+            if (darkModeMediaQuery.matches) {
+                console.log('当前系统已开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded mdui-theme-layout-dark');
+            } else {
+                console.log('当前系统未开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded');
+            }
+        });
+    </script>
+</body>
+
+</html>

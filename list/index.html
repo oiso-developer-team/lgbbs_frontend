@@ -1,0 +1,192 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="theme-color" content="#ffffff">
+    <title>帖子列表 - Powered by OIso</title>
+    <link rel="preconnect" href="//cdn.w3cbus.com">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="https://cdn.w3cbus.com/mdui.org/static/theme/material/index.e8409b3c.css">
+    <style>
+        .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body class="mdui-drawer-body-left mdui-loaded">
+    <div class="mdui-appbar-with-toolbar mg-app">
+        <div class="mc-appbar mdui-appbar mdui-appbar-fixed">
+            <div class="toolbar mdui-toolbar"><button class="drawer mdui-btn mdui-btn-icon mdui-ripple"
+                    mdui-drawer="{target: '#main-drawer', swipe: true}"><i
+                        class="mdui-icon material-icons">menu</i></button><a class="headline" href="/">帖子小站</a>
+                <div class="title">帖子列表</div>
+            </div>
+        </div>
+        <div class="mc-drawer mdui-drawer" id="main-drawer">
+            <div class="mdui-list"><a class="mdui-list-item mdui-ripple" href="/"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">home</i>
+                    <div class="mdui-list-item-content">首页</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple mdui-list-item-active"
+                    href="/list"><i class="mdui-list-item-icon mdui-icon material-icons">list</i>
+                    <div class="mdui-list-item-content">帖子列表</div>
+                </a><a class="mdui-list-item mdui-ripple" href="/rank"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">details</i>
+                    <div class="mdui-list-item-content">神帖排行</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple" href="/save"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">save</i>
+                    <div class="mdui-list-item-content">保存</div>
+                </a><a class="mdui-list-item mdui-ripple" href="/search"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">search</i>
+                    <div class="mdui-list-item-content">搜索</div>
+                </a>
+                <div class="mdui-divider"></div><a class="mdui-list-item mdui-ripple" href="/about"><i
+                        class="mdui-list-item-icon mdui-icon material-icons">info</i>
+                    <div class="mdui-list-item-content">关于</div>
+                </a>
+            </div>
+            <div class="copyright">
+                <p>© 2023 <a href="https://www.oiso.cf" target="_blank">OIso</a></p>
+                <p>Powered by <a href="https://github.com/oiso-developer-team/" target="_blank">OIso Team</a> &amp; <a
+                        href="https://www.amzcd.top" target="_blank">diyanqi</a></p>
+            </div>
+        </div>
+        <div id="page-index" class="mdui-container">
+            <div class="banner">
+                <h1><strong>正</strong>在载入……
+                </h1>
+            </div>
+            <div class="mdui-progress" id="loading">
+                <div class="mdui-progress-indeterminate"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function allWrite(text) {
+            document.getElementById("page-index").innerHTML += text;
+        }
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+        function makePageButton(num) {
+            page = getQueryVariable("page");
+            if (page == false) {
+                page = 1;
+            } else {
+                page = Number(page);
+            }
+            if (page == 1)
+                allWrite(`<button class="mdui-btn-icon mdui-btn mdui-ripple" disabled="disabled"><i class="mdui-icon material-icons">arrow_back</i></button>`);
+            else
+                allWrite(`<button onclick="location.href='/list/?page=` + String(1) + `';" class="mdui-btn-icon mdui-btn mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>`);
+            if (page == 1)
+                allWrite(`<button class="mdui-btn-icon mdui-btn mdui-ripple" disabled="disabled"><i class="mdui-icon material-icons">chevron_left</i></button>`);
+            else
+                allWrite(`<button onclick="location.href='/list/?page=` + String(page - 1) + `';" class="mdui-btn-icon mdui-btn mdui-ripple"><i class="mdui-icon material-icons">chevron_left</i></button>`);
+            var text = (`<div class="mdui-btn-group">`);
+            var startpage, endpage;
+            var tot = Math.ceil(num / 20);
+            if (page <= 3) {
+                startpage = 1, endpage = Math.min(10, tot);
+            } else if (page >= tot - 6) {
+                startpage = Math.max(tot - 9, 1);
+                endpage = tot;
+            } else {
+                startpage = page - 3;
+                endpage = Math.min(page + 6, tot);
+            }
+            for (var i = startpage; i <= endpage; i++) {
+                if (i == page) {
+                    text += (`<button class="mdui-btn-active mdui-btn pb">` + String(i) + `</button>`);
+                } else {
+                    text += (`<button onclick="location.href='/list/?page=` + String(i) + `';" class="mdui-btn mdui-ripple pb">` + String(i) + `</button>`);
+                }
+            }
+            text += (`</div>`);
+            allWrite(text);
+            if (page == tot)
+                allWrite(`<button class="mdui-btn-icon mdui-btn mdui-ripple" disabled="disabled"><i class="mdui-icon material-icons">chevron_right</i></button>`);
+            else
+                allWrite(`<button onclick="location.href='/list/?page=` + String(page + 1) + `';" class="mdui-btn-icon mdui-btn mdui-ripple"><i class="mdui-icon material-icons">chevron_right</i></button>`);
+            if (page == tot)
+                allWrite(`<button class="mdui-btn-icon mdui-btn mdui-ripple" disabled="disabled"><i class="mdui-icon material-icons">arrow_forward</i></button>`);
+            else
+                allWrite(`<button onclick="location.href='/list/?page=` + String(tot) + `';" class="mdui-btn-icon mdui-btn mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>`);
+        }
+
+        var page = getQueryVariable("page");
+        if (isNaN(page)) {
+            page = 1;
+        }
+        const apiurl = "https://lgbbs.oiso.cf/api/list.php?page=" + String(page);
+        // 发送请求
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', apiurl, true);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                var html = `<ul class="mdui-list">`;
+                for (var i = 0; i < data.list.length; i++) {
+                    html += `
+                    <a href="/show/?id=${data.list[i].thread}" target="_blank">
+                        <li class="mdui-list-item mdui-ripple">
+                            <div class="mdui-list-item-content content">
+                                <span>${data.list[i].title}</span>
+                                <span style="text-align: right; opacity: 0.5;"><i class="mdui-icon material-icons" style="transform: scale(0.8) translateY(-2px);">remove_red_eye</i>${data.list[i].click}・<i class="mdui-icon material-icons" style="transform: scale(0.8);">comment</i>${data.list[i].reply_count}</span>
+                            </div>
+                            <i class="mdui-list-item-icon mdui-icon material-icons">chevron_right</i>
+                        </li>
+                    </a>
+                    `;
+                }
+                html += `</ul>`;
+                document.getElementById("page-index").innerHTML = html;
+                makePageButton(data.total_page*20);
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script>
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function handleDarkModeChange(e) {
+            if (e.matches) {
+                console.log('当前系统已开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded mdui-theme-layout-dark');
+            } else {
+                console.log('当前系统未开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded');
+            }
+        }
+
+        darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+        // 当DOM加载完毕：
+        document.addEventListener('DOMContentLoaded', () => {
+            // 如果当前系统开启了暗黑模式：
+            if (darkModeMediaQuery.matches) {
+                console.log('当前系统已开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded mdui-theme-layout-dark');
+            } else {
+                console.log('当前系统未开启暗黑模式');
+                document.body.setAttribute('class', 'mdui-drawer-body-left mdui-loaded');
+            }
+        });
+    </script>
+</body>
+
+</html>
