@@ -9,6 +9,10 @@
     <meta name="theme-color" content="#ffffff">
     <title>搜索 - Powered by OIso</title>
     <link rel="preconnect" href="//cdn.w3cbus.com">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/@waline/client@v2/dist/waline.css"
+  />
     <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
     <link rel="stylesheet" href="/dist/index.css">
 </head>
@@ -106,6 +110,15 @@
         });
     </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2a5f3b3fe84b4050890c0bfb512801d7"}'></script><!-- End Cloudflare Web Analytics -->
+<div id="waline"></div>
+<script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+    init({
+      el: '#waline',
+      serverURL: 'https://waline.oiso.cf',
+    });
+  </script>
 </body>
 
 </html>

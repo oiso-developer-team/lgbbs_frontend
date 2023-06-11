@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#ffffff">
     <title>船新帖子小站 - Powered by OIso</title>
     <link rel="preconnect" href="//cdn.w3cbus.com">
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
     <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
     <link rel="stylesheet" href="/dist/index.css">
 </head>
@@ -60,6 +61,27 @@
                 <div class="actions"><a href="/save" class="mdui-btn mdui-ripple">立即保存</a><a
                         href="https://lgbbs.oiso.cf" class="mdui-btn mdui-ripple" target="_blank">返回旧版</a>
                 </div>
+            </div>
+
+            <div class="banner">
+                <h1><strong>最</strong>新评论
+                </h1>
+                <div class="meta" id="waline-recent"></div>
+                <script type="module">
+                    import { RecentComments } from 'https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.mjs';
+
+                    RecentComments({
+                        serverURL: 'http://waline.oiso.cf',
+                        count: 25,
+                    }).then(({ comments }) => {
+                        console.log(comments);
+                        var myhtml = "";
+                        for(var i = 0; i < comments.length; i++){
+                            myhtml += `<a href='${comments[i].url.replace("/show/","/show/?id=")}'><p>` + comments[i].nick + "：" + comments[i].comment.replace("<p>","").replace("</p>","") + "</p></a>";
+                        }
+                        document.getElementById('waline-recent').innerHTML = myhtml;
+                    });
+                </script>
             </div>
 
             <div class="feature advantage"><svg class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -130,6 +152,7 @@
                         </svg><label>功能丰富</label><span>依托强大的 OIso 生态，带给您无限可能。</span></div>
                 </div>
             </div>
+            <div id="waline"></div>
         </div>
     </div>
     <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
@@ -159,7 +182,18 @@
             }
         });
     </script>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2a5f3b3fe84b4050890c0bfb512801d7"}'></script><!-- End Cloudflare Web Analytics -->
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "2a5f3b3fe84b4050890c0bfb512801d7"}'></script><!-- End Cloudflare Web Analytics -->
+
+    <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+        init({
+            el: '#waline',
+            serverURL: 'https://waline.oiso.cf',
+        });
+    </script>
 </body>
 
 </html>
