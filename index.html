@@ -48,16 +48,16 @@
                 </a>
             </div>
             <div class="copyright">
-                <p>© 2023 <a href="https://www.oiso.cf" target="_blank">OIso</a></p>
-                <p>Powered by <a href="https://github.com/oiso-developer-team/" target="_blank">OIso Team</a> &amp; <a
-                        href="https://www.luogu.com.cn/user/237496" target="_blank">__OwO__</a></p>
+                <p>服务提供者：<a href="https://www.oiso.cf" target="_blank">OIso</a></p>
+                <p>前端&amp;后端二开：<a href="https://github.com/oiso-developer-team/" target="_blank">OIso Team</a></p>
+                <p>后端原作者：<a href="https://www.luogu.com.cn/user/237496" target="_blank">__OwO__</a> &amp; <a href="https://www.luogu.com.cn/user/37084" target="_blank">Yemaster</a></p>
             </div>
         </div>
         <div id="page-index" class="mdui-container">
             <div class="banner">
                 <h1><strong>帖</strong>子小站
                 </h1>
-                <div class="meta">新版帖子小站更加漂亮、稳定且好用，让你更轻松地保存、查看、搜索洛谷帖子</div>
+                <div class="meta">新版帖子小站<del>更加漂亮、稳定且好用</del>，让你更轻松地保存、查看、搜索洛谷帖子</div>
                 <div class="actions"><a href="/save" class="mdui-btn mdui-ripple">立即保存</a><a
                         href="https://lgbbs.oiso.cf" class="mdui-btn mdui-ripple" target="_blank">返回旧版</a>
                 </div>
@@ -72,7 +72,7 @@
 
                     RecentComments({
                         serverURL: 'https://waline.oiso.cf',
-                        count: 25,
+                        count: 10,
                     }).then(({ comments }) => {
                         console.log(comments);
                         var myhtml = "";
@@ -82,6 +82,7 @@
                         document.getElementById('waline-recent').innerHTML = myhtml;
                     });
                 </script>
+                <div class="meta">尽管我们有很多不足，但是我们会努力改进的！</div>
             </div>
 
             <div class="feature advantage"><svg class="icon" viewBox="0 0 1024 1024" version="1.1"
