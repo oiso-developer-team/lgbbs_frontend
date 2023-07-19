@@ -11,10 +11,14 @@
     <link rel="preconnect" href="//cdn.w3cbus.com">
 <link
     rel="stylesheet"
-    href="https://unpkg.com/@waline/client@v2/dist/waline.css"
+    href="https://github.elemecdn.com/@waline/client@v2/dist/waline.css"
   />
-    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="https://github.elemecdn.com/mdui@1.0.2/dist/css/mdui.min.css" />
     <link rel="stylesheet" href="/dist/index.css">
+<link
+  rel="stylesheet"
+href="https://github.elemecdn.com/@waline/client@2.15.5/dist/waline-meta.css"
+/>
 </head>
 
 <body class="mdui-drawer-body-left mdui-loaded">
@@ -68,7 +72,7 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script src="https://github.elemecdn.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
     <script>
         const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -98,11 +102,12 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2a5f3b3fe84b4050890c0bfb512801d7"}'></script><!-- End Cloudflare Web Analytics -->
 
 <script type="module">
-    import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+    import { init } from 'https://github.elemecdn.com/@waline/client@v2/dist/waline.mjs';
 
     init({
       el: '#waline',
       serverURL: 'https://waline.oiso.cf',
+dark: 'auto',
     });
   </script>
 </body>
